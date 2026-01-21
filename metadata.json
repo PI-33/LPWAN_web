@@ -1,0 +1,5 @@
+{
+  "name": "LPWAN Pipeline Monitor",
+  "description": "City Underground Pipeline Intelligent Monitoring System - LPWAN Network Deployment. Monitors manhole status, water levels, and methane gas at 3m depth.",
+  "requestFramePermissions": []
+}
