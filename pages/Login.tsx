@@ -1,9 +1,13 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShieldCheck, Radio } from 'lucide-react';
+import { ShieldCheck, Radio, UserCheck, Shield } from 'lucide-react';
+import { useAuth } from '../AuthContext';
+import { UserRole } from '../types';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { role, setRole } = useAuth();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -12,7 +16,6 @@ const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Ambience */}
       <div className="absolute w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-3xl -top-40 -left-20"></div>
       <div className="absolute w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-3xl bottom-0 right-0"></div>
 
@@ -23,29 +26,48 @@ const Login: React.FC = () => {
           </div>
           <h1 className="text-xl font-bold text-white tracking-wide text-center">City Underground Pipeline<br/>Intelligent Monitoring</h1>
           <div className="flex items-center gap-2 mt-3">
-             <span className="text-xs bg-slate-800 text-blue-400 px-2 py-1 rounded border border-slate-700">LPWAN</span>
-             <span className="text-xs bg-slate-800 text-blue-400 px-2 py-1 rounded border border-slate-700">Depth: 3m</span>
+             <span className="text-xs bg-slate-800 text-blue-400 px-2 py-1 rounded border border-slate-700">LPWAN v3.1</span>
+             <span className="text-xs bg-slate-800 text-blue-400 px-2 py-1 rounded border border-slate-700">Role: {role === 'manager' ? 'Admin' : 'Staff'}</span>
           </div>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
+            <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Access Role</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setRole('maintenance')}
+                className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
+                  role === 'maintenance' 
+                  ? 'bg-blue-600/20 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]' 
+                  : 'bg-slate-800/50 border-slate-700 text-slate-500 hover:bg-slate-800'
+                }`}
+              >
+                <UserCheck size={18} />
+                <span className="text-sm font-medium">维修人员</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole('manager')}
+                className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
+                  role === 'manager' 
+                  ? 'bg-purple-600/20 border-purple-500 text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.3)]' 
+                  : 'bg-slate-800/50 border-slate-700 text-slate-500 hover:bg-slate-800'
+                }`}
+              >
+                <Shield size={18} />
+                <span className="text-sm font-medium">管理人员</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Operator ID</label>
             <input 
               type="text" 
-              defaultValue="admin"
+              defaultValue="admin_01"
               className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              placeholder="Enter ID"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Password</label>
-            <input 
-              type="password" 
-              defaultValue="password"
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              placeholder="••••••••"
             />
           </div>
 
@@ -54,18 +76,13 @@ const Login: React.FC = () => {
             className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3.5 rounded-lg transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 flex items-center justify-center gap-2"
           >
             <ShieldCheck size={20} />
-            <span>Access Control Platform</span>
+            <span>Enter Monitoring System</span>
           </button>
         </form>
 
         <div className="mt-8 text-center border-t border-slate-800 pt-4">
-            <div className="flex justify-center gap-4 text-[10px] text-slate-500 uppercase tracking-wider">
-                <span>Reliability &gt; 95%</span>
-                <span>•</span>
-                <span>Battery &gt; 3 Years</span>
-            </div>
             <p className="text-[10px] text-slate-600 mt-2">
-                System Version v3.1.0 | Pilot Sector A
+                Authorized Personnel Only | Pilot Sector A
             </p>
         </div>
       </div>

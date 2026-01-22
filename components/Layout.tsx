@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, List, LogOut, Activity, Radio } from 'lucide-react';
+import { LayoutDashboard, List, LogOut, Radio, Shield, User } from 'lucide-react';
+import { useAuth } from '../AuthContext';
 
 const SidebarItem: React.FC<{ to: string; icon: React.ReactNode; label: string }> = ({ to, icon, label }) => (
   <NavLink
@@ -20,6 +22,7 @@ const SidebarItem: React.FC<{ to: string; icon: React.ReactNode; label: string }
 
 const Layout: React.FC = () => {
   const navigate = useNavigate();
+  const { role } = useAuth();
 
   const handleLogout = () => {
     navigate('/login');
@@ -27,7 +30,6 @@ const Layout: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
-      {/* Sidebar */}
       <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
         <div className="p-6 border-b border-slate-800 flex items-center gap-2">
           <div className="bg-blue-600 p-2 rounded-lg">
@@ -57,23 +59,26 @@ const Layout: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Header */}
         <header className="h-16 bg-slate-900/50 backdrop-blur-md border-b border-slate-800 flex items-center justify-between px-6">
-          <h2 className="text-sm font-medium text-slate-300">City Underground Pipeline Intelligent Monitoring System (LPWAN)</h2>
+          <h2 className="text-sm font-medium text-slate-300">City Underground Pipeline Intelligent Monitoring</h2>
           <div className="flex items-center gap-4">
+             <div className={`flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider ${
+               role === 'manager' 
+               ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' 
+               : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+             }`}>
+               {role === 'manager' ? <Shield size={12} /> : <User size={12} />}
+               {role === 'manager' ? 'Management Mode' : 'Maintenance Mode'}
+             </div>
+             
              <div className="flex items-center gap-2 bg-green-500/10 px-2 py-1 rounded border border-green-500/20">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="text-xs text-green-400 font-mono font-bold">NETWORK: ONLINE</span>
+                <span className="text-xs text-green-400 font-mono font-bold uppercase">Network: Online</span>
              </div>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold ring-2 ring-slate-800">
-              AD
-            </div>
           </div>
         </header>
 
-        {/* Page Content */}
         <div className="flex-1 overflow-auto p-6 relative">
           <Outlet />
         </div>
